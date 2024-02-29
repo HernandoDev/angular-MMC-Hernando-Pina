@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { uiUtils } from '../utils/ui.utils';
+import { StorageUtil } from '../utils/storage.utils';
 import { UserService } from "./services/user.service";
 import { catchError } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute,Router } from '@angular/router';
 
 @Component({
   selector: 'app-user',
@@ -15,7 +16,7 @@ export class UserComponent implements OnInit, OnDestroy {
     amount: new FormControl(''),
     detail: new FormControl(''),
   });
-  constructor(private fb: FormBuilder,private userService:UserService,private route:ActivatedRoute) {}
+  constructor(private fb: FormBuilder,private userService:UserService,private route:ActivatedRoute,private router: Router) {}
   public transaciones;
   public total:number;
   ngOnInit(): void {
@@ -37,8 +38,14 @@ export class UserComponent implements OnInit, OnDestroy {
         uiUtils.eliminarLoading()
         if (error.error.error){
           uiUtils.showToast(error.error.error,'Error al obtener transacciones', 'error');
+        }else if (error.error == "jwt expired"){
+          StorageUtil.removeItem('user');
+          StorageUtil.removeItem('token');
+          this.router.navigate(['/login']);
+          console.error('Error en la solicitud:', error);
+          uiUtils.showToast('Error de conexión con el servidor','Sesión expirada, vuelve a iniciar sesión', 'error');
         }else{
-          uiUtils.showToast('Error de conexión con el servidor','Error al obtener transacciones', 'error');
+          uiUtils.showToast('Error de conexión con el servidor','Error al insertar transaccion', 'error');
         }
         throw error;
       })
@@ -67,9 +74,16 @@ export class UserComponent implements OnInit, OnDestroy {
     if(amountValido){
       this.userService.insertarTransaccion(this.transactionForm.value.detail,this.transactionForm.value.amount).pipe(
         catchError(error => {
+          debugger
           uiUtils.eliminarLoading()
           if (error.error.error){
             uiUtils.showToast(error.error.error,'Error al obtener transaccion', 'error');
+          }else if (error.error == "jwt expired"){
+            StorageUtil.removeItem('user');
+            StorageUtil.removeItem('token');
+            this.router.navigate(['/login']);
+            console.error('Error en la solicitud:', error);
+            uiUtils.showToast('Error de conexión con el servidor','Sesión expirada, vuelve a iniciar sesión', 'error');
           }else{
             uiUtils.showToast('Error de conexión con el servidor','Error al insertar transaccion', 'error');
           }

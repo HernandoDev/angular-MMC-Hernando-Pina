@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AdminService } from "./services/admin.service";
 import { catchError } from 'rxjs';
 import { uiUtils } from '../utils/ui.utils';
-import { ActivatedRoute } from '@angular/router';
+import { StorageUtil } from '../utils/storage.utils';
+import { ActivatedRoute,Router } from '@angular/router';
 
 interface Socio {
   id: number;
@@ -22,7 +23,7 @@ export class AdminComponent implements OnInit {
   public listaSocios: Socio[] = [];
   public total : number;
 
-  constructor(private adminService:AdminService,private route:ActivatedRoute) {}
+  constructor(private adminService:AdminService,private route:ActivatedRoute,private router:Router) {}
 
   ngOnInit(): void {
     this.route.data.subscribe(data => {
@@ -39,8 +40,14 @@ export class AdminComponent implements OnInit {
         uiUtils.eliminarLoading()
         if (error.error.error){
           uiUtils.showToast(error.error.error,'Error al obtener socios', 'error');
+        }else if (error.error == "jwt expired"){
+          StorageUtil.removeItem('user');
+          StorageUtil.removeItem('token');
+          this.router.navigate(['/login']);
+          console.error('Error en la solicitud:', error);
+          uiUtils.showToast('Error de conexión con el servidor','Sesión expirada, vuelve a iniciar sesión', 'error');
         }else{
-          uiUtils.showToast('Error de conexión con el servidor','Error al obtener socios', 'error');
+          uiUtils.showToast('Error de conexión con el servidor','Error al insertar transaccion', 'error');
         }
         throw error;
       })

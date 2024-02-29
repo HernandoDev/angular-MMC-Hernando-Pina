@@ -8,6 +8,15 @@ import { Util } from '../utils/util';
 @Injectable({
   providedIn: 'root'
 })
+
+  /**
+   * @description
+   * Valida si el usuario que quiere acceder a la vista /admin es realmente un usuario admin
+   * Si el usuario que trata de acceder es un usuario coustumer redirigira a la ruta /user
+   * Si no cumple ninguna de esas condiciones redigira al login
+   *
+   * @returns {Boolean}
+   **/
 export class AdminGuardGuard implements CanActivate {
   constructor(private router: Router) { }
   canActivate(

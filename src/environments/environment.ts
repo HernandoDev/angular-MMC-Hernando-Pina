@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   api: {
-    // url: 'http://localhost:3000',
-    url: 'http://74.235.92.112:3000',
+    // url: 'http://localhost:3000', //URL LOCAL
+    url: 'http://74.235.92.112:3000', //URL  SERVIDOR DE PRODUCCION en mi VM personal ubicada en Azure
   },
 };
 

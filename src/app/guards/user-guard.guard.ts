@@ -10,7 +10,14 @@ import { StorageUtil } from '../utils/storage.utils';
 })
 export class UserGuardGuard implements CanActivate {
   constructor(private router: Router) { }
-
+  /**
+   * @description
+   * Valida si el usuario que quiere acceder a la vista /user es realmente un usuario admin
+   * Si el usuario que trata de acceder es un usuario admin redirigira a la ruta /admin
+   * Si no cumple ninguna de esas condiciones redigira al login
+   *
+   * @returns {Boolean}
+   **/
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {

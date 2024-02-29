@@ -11,7 +11,11 @@ import { Router } from '@angular/router';
 @Injectable()
 export class AdminResolver implements Resolve<any> {
   constructor(private adminService: AdminService,private router: Router) {}
-
+ /**
+   * @description
+   * Realiza una solicitud HTTP POST para obtener todos los socios y su informacion de totales
+   * Valida si el token no esta expirado
+   **/
   resolve(): Observable<any> {
     return this.adminService.obtenerSociosTotales()
     .pipe(

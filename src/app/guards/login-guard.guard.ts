@@ -10,7 +10,14 @@ import { Util } from '../utils/util';
 })
 export class LoginGuardGuard implements CanActivate {
   constructor(private router: Router) { }
-
+  /**
+   * @description
+   * Valida si el usuario que quiere acceder a la vista /login no tiene ya una sesion iniciada
+   * Si el usuario que trata de acceder es un usuario coustumer redirigira a la ruta /user
+   * Si el usuario que trata de acceder es un usuario admin redirigira a la ruta /admin
+   *
+   * @returns {Boolean}
+   **/
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {

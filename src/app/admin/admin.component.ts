@@ -26,6 +26,7 @@ export class AdminComponent implements OnInit {
   constructor(private adminService:AdminService,private route:ActivatedRoute,private router:Router) {}
 
   ngOnInit(): void {
+    //Obtiene los datos del AdminResolver
     this.route.data.subscribe(data => {
       const res = data['socios'];
       this.listaSocios = res.data;
@@ -33,6 +34,10 @@ export class AdminComponent implements OnInit {
     });
   }
 
+  /**
+   * @description
+   * Realiza una solicitud HTTP GET para obtener información sobre socios totales ademas valida si el token esta expirado.
+   **/
   obtenerSociosTotales(){
     uiUtils.loading()
     this.adminService.obtenerSociosTotales().pipe(
@@ -41,6 +46,7 @@ export class AdminComponent implements OnInit {
         if (error.error.error){
           uiUtils.showToast(error.error.error,'Error al obtener socios', 'error');
         }else if (error.error == "jwt expired"){
+          // Retorna al login y elimina el LocalStorage
           StorageUtil.removeItem('user');
           StorageUtil.removeItem('token');
           this.router.navigate(['/login']);

@@ -11,7 +11,10 @@ import { Router } from '@angular/router';
 @Injectable()
 export class SociosResolver implements Resolve<any> {
   constructor(private userService: UserService,private router: Router) {}
-
+  /**
+   * @description
+   * Realiza una solicitud HTTP POST para obtener todas las transacciones del usuario
+   **/
   resolve(): Observable<any> {
     return this.userService.obtenerTransacionesUsuario()
     .pipe(

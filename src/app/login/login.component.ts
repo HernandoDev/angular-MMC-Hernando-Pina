@@ -25,13 +25,14 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {}
   ngOnDestroy(): void {}
-
+  /**
+   * @description
+   * Realiza una solicitud HTTP POST para  validar los credenciales
+   **/
   public onSubmit() {
     uiUtils.loading();
-    // console.log(this.loginForm.value);
     this.loginService.login(this.loginForm.value.username, this.loginForm.value.password).pipe(
       catchError(error => {
-        // console.error('Error en el login', error);
         uiUtils.eliminarLoading()
         if (error.error.error){
           uiUtils.showToast(error.error.error,'Error al iniciar sesión', 'error');

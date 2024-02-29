@@ -20,6 +20,7 @@ export class UserComponent implements OnInit, OnDestroy {
   public transaciones;
   public total:number;
   ngOnInit(): void {
+    // Obtiene los datos del socioResolver
     this.route.data.subscribe(data => {
       const res = data['socios'];
       this.transaciones = res.transactions;
@@ -28,9 +29,16 @@ export class UserComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy(): void {}
 
+  //Suma los amounts de las transacciones existentes
   sumarAmounts(transacciones: any[]) {
     this.total = transacciones.reduce((suma, transaccion) => suma + transaccion.amount, 0);
   }
+
+  /**
+   * @description
+   * Consulta los datos de transaccion de un usuario HTTP GET
+   *
+   **/
   obtenerTransacionesUsuario(){
     uiUtils.loading()
     this.userService.obtenerTransacionesUsuario().pipe(
@@ -58,6 +66,7 @@ export class UserComponent implements OnInit, OnDestroy {
     );
   }
 
+  // Valida si el amount que se va a enviar para insertar tiene un formato valido
   validarAmount(amount){
     amount = parseInt(amount)
     if (isNaN(amount) || amount < 0) {
@@ -68,6 +77,7 @@ export class UserComponent implements OnInit, OnDestroy {
     }
   }
 
+  //Inserta una nueva transaccion mediante una peticion HTTP POST asociada al usuario que esta con la sesion activa
   public onSubmit() {
     uiUtils.loading()
     let amountValido = this.validarAmount(this.transactionForm.value.amount)

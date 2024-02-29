@@ -12,7 +12,10 @@ export class LogoutComponent implements OnInit {
   constructor(private routeService: Router) {}
 
   ngOnInit(): void {}
-
+  /**
+   * @description
+   * Realiza el proceso de cerrar sesion y eliminar los datos del LocalStorage ademas de redirigir al login
+   **/
   public logout() {
     let user = StorageUtil.getItem('user')
     this.routeService.navigate(['/login']);
